@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.mis.mapper.CustomerMapper">
+
+<!-- customer 테이블 등록 쿼리 -->
+	<insert id="insertCustomer" parameterType="com.mis.domain.CustomerVO">
+	INSERT INTO tbl_customer c (c.userid
+							  , c.name
+							  , c.birthyear
+							  , c.address
+							  , c.phone
+							  , c.grade)
+	VALUES (#{userid}
+		  , #{name}
+		  , #{birthyear}
+		  , #{address}
+		  , #{phone}
+		  , #{grade} ) 
+	
+	</insert>
+
+<!-- customer 테이블 1건의 데이터 조회 쿼리 -->
+	<select id="readCustomer" parameterType="string" resultType="com.mis.domain.CustomerVO">
+		SELECT c.*
+		  FROM tbl_customer c
+		 WHERE c.userid = #{userid}
+	</select>
+
+<!-- customer 테이블 1건의 데이터 수정 쿼리 -->
+	<update id="updateCustomer" parameterType="com.mis.domain.CustomerVO">
+		UPDATE tbl_customer c
+	     <set>
+				  c.moddate = sysdate
+			<if test="name != null">
+				, c.name = #{name}
+			</if>
+			<if test="birthyear != null">
+				, c.birthyear = #{birthyear}
+			</if>
+			<if test="address != null">
+				, c.address = #{address}
+			</if>
+			<if test="phone != null">
+				, c.phone = #{phone}
+			</if>
+			<if test="grade != null">
+				, c.grade = #{grade}
+			</if>
+			<trim prefix="SET" prefixOverrides="," />
+			WHERE c.userid = #{userid}
+		</set>
+	</update> 
+
+<!-- customer 테이블 1건의 데이터 삭제 쿼리 -->
+	<delete id="deleteCustomer" parameterType="com.mis.domain.CustomerVO">
+		DELETE FROM tbl_customer c
+	   	 WHERE c.userid = #{userid} 
+	</delete>
+
+</mapper>
