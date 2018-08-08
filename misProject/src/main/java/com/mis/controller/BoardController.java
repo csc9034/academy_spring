@@ -22,11 +22,19 @@ public class BoardController {
 
 	@Inject
 	private BoardService service;
-
+	
+	/**
+	 * 게시물을 등록하는 register.jsp로 이동
+	 * 
+	 * @param board	: boardVO 객체
+	 * @param model : Model 객체
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void registerGET(BoardVO board, Model model) throws Exception {
 		
 		logger.info("regist get.......................");
+		
 	}
 	
 	/**
@@ -79,6 +87,13 @@ public class BoardController {
 		
 	}
 	
+	/**
+	 * 게시물을 삭제해주는 Controller
+	 * @param bno	: 삭제할 게시물번호 (int bno)
+	 * @param rttr
+	 * @return		: listAll 쿼리를 실행할 controller로 리턴
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/remove", method = RequestMethod.POST)
 	public String remove(@RequestParam("bno") int bno, RedirectAttributes rttr) throws Exception {
 		
@@ -92,6 +107,13 @@ public class BoardController {
 
 	}
 	
+	/**
+	 * 게시물을 수정할 페이지로 이동
+	 * 
+	 * @param bno	: 수정할 게시물 번호(int bno)
+	 * @param model : Model 객체
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public void modifyGET(int bno, Model model) throws Exception {
 		
@@ -99,6 +121,14 @@ public class BoardController {
 		model.addAttribute(service.read(bno));
 	}
 	
+	/**
+	 * 게시물을 수정해주는 Controller
+	 * 
+	 * @param board   : BoardVO 객체
+	 * @param rttr
+	 * @return		  : listAll 해주는 Controller로 이동
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modifyPOST(BoardVO board, RedirectAttributes rttr) throws Exception {
 		
