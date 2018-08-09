@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.mis.domain.BoardVO;
+import com.mis.domain.Criteria;
+import com.mis.domain.SearchCriteria;
 
 /**
  * BoardDAO 인터페이스를 구현한 클래스
@@ -52,6 +54,40 @@ public class BoardDAOImpl implements BoardDAO{
 	@Override
 	public void updateView(int bno) throws Exception {
 		sqlSession.update(namespace + ".updateView", bno);
+	}
+
+	@Override
+	public List<BoardVO> listPage(int page) throws Exception {
+		if (page <= 0) {
+			
+			page = 1;
+			
+		}
+		
+		page = (page - 1) * 10;
+		
+		return sqlSession.selectList(namespace + ".listPage", page);
+	}
+
+	@Override
+	public List<BoardVO> listCriteria(Criteria cri) throws Exception {
+		
+		return sqlSession.selectList(namespace + ".listPage", cri);
+	}
+
+	@Override
+	public int countPaging(Criteria cri) throws Exception {
+		return sqlSession.selectOne(namespace + ".countPaging", cri) ;
+	}
+
+	@Override
+	public List<BoardVO> listSearch(SearchCriteria cri) throws Exception {
+		return sqlSession.selectList(namespace + ".listSearch", cri);
+	}
+
+	@Override
+	public int listSearchCount(SearchCriteria cri) throws Exception {
+		return sqlSession.selectOne(namespace + ".listSearchCount", cri);
 	}
 
 }

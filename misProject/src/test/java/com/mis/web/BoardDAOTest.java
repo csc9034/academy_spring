@@ -2,6 +2,8 @@ package com.mis.web;
 
 
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.junit.FixMethodOrder;
@@ -14,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mis.domain.BoardVO;
+import com.mis.domain.Criteria;
 import com.mis.persistence.BoardDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,8 +71,17 @@ public class BoardDAOTest {
 	public void testDelete() throws Exception {
 		dao.delete(1);
 		logger.info("삭제 확인");
-
-		
 	}
-
+	
+	@Test
+	public void testCriteria() throws Exception {
+		Criteria cri = new Criteria();
+		cri.setPage(2);
+		
+		List<BoardVO> list = dao.listCriteria(cri);
+		
+		for(BoardVO board : list) {
+			logger.info(board.getBno() + ":" + board.getTitle());
+		}
+	}
 }

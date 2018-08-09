@@ -3,6 +3,8 @@ package com.mis.persistence;
 import java.util.List;
 
 import com.mis.domain.BoardVO;
+import com.mis.domain.Criteria;
+import com.mis.domain.SearchCriteria;
 
 /**
  * tbl_board 테이블의 기본적인 DB 쿼리 CRUD를 정의한 인터페이스
@@ -60,5 +62,15 @@ public interface BoardDAO {
 	 * @throws Exception
 	 */
 	public void updateView(int bno) throws Exception;
+	
+	public List<BoardVO> listPage(int page) throws Exception;
+	
+	public List<BoardVO> listCriteria(Criteria cri) throws Exception;
+	
+	public int countPaging(Criteria cri) throws Exception;
+	
+	public List<BoardVO> listSearch(SearchCriteria cri) throws Exception;
+	
+	public int listSearchCount(SearchCriteria cri) throws Exception;
 
 }

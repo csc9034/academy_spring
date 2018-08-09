@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.mis.domain.BoardVO;
+import com.mis.domain.Criteria;
+import com.mis.domain.SearchCriteria;
 import com.mis.persistence.BoardDAO;
 
 /**
@@ -28,6 +30,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardVO read(Integer bno) throws Exception {
+		// 조회수 증가 쿼리 실행
+		dao.updateView(bno);
+		
 		return dao.read(bno);
 	}
 
@@ -47,7 +52,23 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void viewCntModify(Integer bno) throws Exception {
-		dao.updateView(bno);
+	public List<BoardVO> listCriteria(Criteria cri) throws Exception {
+		return dao.listCriteria(cri);
 	}
+
+	@Override
+	public int listCountCriteria(Criteria cri) throws Exception {
+		return dao.countPaging(cri);
+	}
+
+	@Override
+	public List<BoardVO> listSearchCriteria(SearchCriteria cri) throws Exception {
+		return dao.listSearch(cri);
+	}
+
+	@Override
+	public int listSearchCount(SearchCriteria cri) throws Exception {
+		return dao.listSearchCount(cri);
+	}
+
 }
