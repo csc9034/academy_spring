@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.mis.mappers.ProductMapper">
+	<insert id="create">
+		INSERT INTO tbl_product (  prodcod
+		                         , prodname
+		                         , price
+		                         , quantity)
+		                 VALUES (  seq_product.nextval
+		                         , #{prodname}
+		                         , #{price}
+		                         , #{quantity})
+	</insert>
+
+	<update id="update">
+		      UPDATE tbl_product
+		         SET moddate = sysdate 
+		              <if test="prodname != null">
+		         , prodname = #{prodname}
+		         </if>
+		              <if test="price != null">
+		         , price = #{price}
+		         </if>
+		              <if test="quantity != null">
+		         , quantity = #{quantity}
+		         </if>
+		     <trim prefix="SET" prefixOverrides="," />
+		       WHERE prodcod  = #{prodcod}
+   </update>
+	
+	<delete id="delete">
+		DELETE tbl_product
+		 WHERE prodcod = #{prodcod}
+	</delete>
+	
+	<select id="read" resultType="com.mis.domain.ProductVO">
+		SELECT prodcod
+		     , prodname
+		     , price
+		     , quantity
+		     , regdate
+		     , moddate
+		  FROM tbl_product
+		 WHERE prodcod = #{prodcod}
+	</select>
+	
+	<select id="listAll" resultType="com.mis.domain.ProductVO">
+		<![CDATA[
+		SELECT prodcod
+		     , prodname
+		     , price
+		     , quantity
+		     , regdate
+		  FROM tbl_product
+		 WHERE prodcod > 0
+		 ORDER BY prodcod DESC
+		 ]]>
+	</select>	
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'n'.toString()">
+				AND prodname like '%' || #{keyword} || '%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				AND prodcod like '%' || #{keyword} || '%'
+			</if>
+			<if test="searchType == 'nc'.toString()">
+				AND (   prodname   like '%' || #{keyword} || '%'
+				     OR prodcod   like '%' || #{keyword} || '%'
+				    )
+			</if>
+		</if>	
+	</sql>
+	
+	<select id="listSearch" resultType="com.mis.domain.ProductVO">
+		<![CDATA[
+			SELECT *
+			  FROM (SELECT ROWNUM AS rnum
+			             , prodcod
+					     , prodname
+					     , price
+					     , quantity
+					     , regdate
+					  FROM tbl_product
+					 WHERE prodcod > 0
+		]]>
+		<include refid="search" />
+		<![CDATA[
+					 ORDER BY prodcod DESC
+				   )
+			 WHERE (rnum >= #{pageStart} AND rnum <= #{pageEnd})
+			 ORDER BY prodcod DESC, regdate DESC
+		]]>
+	</select>
+	
+	<select id="listSearchCount" resultType="int">
+		<![CDATA[
+			SELECT count(prodcod)
+			  FROM tbl_product
+			 WHERE prodcod > 0
+		]]>
+		<include refid="search" />
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+		SELECT count(prodcod)
+		  FROM tbl_product
+		 WHERE prodcod > 0
+	]]>
+	</select> 
+	
+</mapper>
